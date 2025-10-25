@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title: 'New Coupon · Link234' }) %>
+
+    <!-- Tailwind comes from your project via partials/head -->
+    <!-- Preline -->
+    <script defer src="https://unpkg.com/preline/dist/preline.js"></script>
+
+    <!-- SlimSelect (multi select) -->
+    <link rel="stylesheet" href="/public/js/slimselect.css" />
+
+    <!-- DateDropper (match your project usage) -->
+    <link rel="stylesheet" href="/public/js/datedropper.min.css" />
+    <script src="/public/js/datedropper-javascript.js"></script>
+    <link rel="stylesheet" href="/public/css/app.css" />
+    <style>
+      /* Optional: better numeric input spinners removal (Chrome) */
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+      .dd__calendar .dd__body .dd__item.dd-selected:before,
+      .dd__primaryButton:not([disabled]),
+      .dd__block[data-key="m"] {
+        background: #155dfc !important;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <%- include('partials/accHeader') %>
+
+    <main class="mx-auto w-full max-w-[1000px] pb-[80px] px-4 py-6">
+      <div class="flex items-center gap-3 mb-6">
+        <h1 class="text-2xl font-semibold">Create Coupon</h1>
+        <div class="ml-auto">
+          <a
+            href="/coupons"
+            class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border hover:bg-gray-50"
+          >
+            Back
+          </a>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <form id="couponForm" novalidate>
+          <!-- Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Code -->
+            <div>
+              <label for="code" class="block text-sm font-medium mb-1"
+                >Code <span class="text-red-600">*</span></label
+              >
+              <input
+                id="code"
+                name="code"
+                type="text"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="Launch90"
+                autocomplete="off"
+              />
+              <p id="err_code" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Type -->
+            <div>
+              <label for="type" class="block text-sm font-medium mb-1"
+                >Type <span class="text-red-600">*</span></label
+              >
+              <select
+                id="type"
+                name="type"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600 bg-white"
+              >
+                <option value="">Select type</option>
+                <option value="percent">Percent</option>
+                <option value="amount">Amount</option>
+              </select>
+              <p id="err_type" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Value -->
+            <div>
+              <label for="value" class="block text-sm font-medium mb-1"
+                >Value <span class="text-red-600">*</span></label
+              >
+              <input
+                id="value"
+                name="value"
+                type="number"
+                step="1"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="90 (if percent) or 1000 (minor units if amount?)"
+              />
+              <p id="err_value" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Max Discount (Minor) -->
+            <div>
+              <label
+                for="maxDiscountMinor"
+                class="block text-sm font-medium mb-1"
+                >Max Discount (Minor units)</label
+              >
+              <input
+                id="maxDiscountMinor"
+                name="maxDiscountMinor"
+                type="number"
+                step="1"
+                min="0"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="1000"
+              />
+              <p
+                id="err_maxDiscountMinor"
+                class="mt-1 text-xs text-red-600 hidden"
+              ></p>
+            </div>
+
+            <!-- Regions (SlimSelect Multi) -->
+            <div class="md:col-span-2">
+              <label for="regions" class="block text-sm font-medium mb-1"
+                >Regions <span class="text-red-600">*</span></label
+              >
+              <select id="regions" class="js-langs" name="regions" multiple>
+                <option value="IN">IN</option>
+                <option value="EU">EU</option>
+                <option value="INTL">INTL</option>
+              </select>
+              <p id="err_regions" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Start Date -->
+            <div>
+              <label for="startsAt" class="block text-sm font-medium mb-1"
+                >Starts At <span class="text-red-600">*</span></label
+              >
+              <input
+                id="startsAt"
+                name="startsAt"
+                type="text"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="dd-mm-yyyy"
+                autocomplete="off"
+              />
+              <p id="err_startsAt" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- End Date -->
+            <div>
+              <label for="endsAt" class="block text-sm font-medium mb-1"
+                >Ends At <span class="text-red-600">*</span></label
+              >
+              <input
+                id="endsAt"
+                name="endsAt"
+                type="text"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="dd-mm-yyyy"
+                autocomplete="off"
+              />
+              <p id="err_endsAt" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Usage Limit -->
+            <div>
+              <label for="usageLimit" class="block text-sm font-medium mb-1"
+                >Usage Limit <span class="text-red-600">*</span></label
+              >
+              <input
+                id="usageLimit"
+                name="usageLimit"
+                type="number"
+                step="1"
+                min="1"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="1000"
+              />
+              <p
+                id="err_usageLimit"
+                class="mt-1 text-xs text-red-600 hidden"
+              ></p>
+            </div>
+
+            <!-- Per-user Limit -->
+            <div>
+              <label for="perUserLimit" class="block text-sm font-medium mb-1"
+                >Per-user Limit <span class="text-red-600">*</span></label
+              >
+              <input
+                id="perUserLimit"
+                name="perUserLimit"
+                type="number"
+                step="1"
+                min="1"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="1"
+              />
+              <p
+                id="err_perUserLimit"
+                class="mt-1 text-xs text-red-600 hidden"
+              ></p>
+            </div>
+
+            <!-- Active Toggle -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Active?</label>
+              <label
+                class="inline-flex items-center gap-2 cursor-pointer select-none"
+              >
+                <input id="isActive" type="checkbox" class="sr-only" />
+                <span
+                  id="activeBar"
+                  class="relative inline-block w-11 h-6 rounded-full bg-gray-300 transition"
+                >
+                  <span
+                    id="activeKnob"
+                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition"
+                  ></span>
+                </span>
+                <span id="activeText" class="text-sm text-gray-600"
+                  >Inactive</span
+                >
+              </label>
+              <p id="err_isActive" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+
+            <!-- Notes -->
+            <div class="md:col-span-2">
+              <label for="notes" class="block text-sm font-medium mb-1"
+                >Notes</label
+              >
+              <textarea
+                id="notes"
+                name="notes"
+                rows="4"
+                class="py-2.5 px-3 block w-full border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-blue-600"
+                placeholder="Public launch 90% off capped at €10"
+              ></textarea>
+              <p id="err_notes" class="mt-1 text-xs text-red-600 hidden"></p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 flex items-center gap-3">
+            <button
+              id="btnSubmit"
+              type="submit"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Save Coupon
+            </button>
+            <a
+              href="/admin/coupons"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-gray-50"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/public/js/slimselect.min.js"></script>
+    <script src="/public/apicalls/add-coupon.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- SlimSelect init ---
+        const regionsSelect = new SlimSelect({
+          select: "#regions",
+          settings: {
+            placeholderText: "Select regions",
+            closeOnSelect: false,
+            hideSelected: true,
+          },
+        });
+
+        // --- DateDropper init (two inputs) ---
+        // format dd-mm-yyyy to match your project usage
+        new dateDropper({
+          selector: "#startsAt",
+          lang: "en",
+          format: "dd-mm-y",
+          maxDate: null,
+          overlay: false,
+          doubleView: false,
+          autofill: true,
+        });
+
+        new dateDropper({
+          selector: "#endsAt",
+          lang: "en",
+          format: "dd-mm-y",
+          maxDate: null,
+          overlay: false,
+          doubleView: false,
+          autofill: true,
+        });
+
+        // --- Active toggle visuals ---
+        const isActiveEl = document.getElementById("isActive");
+        const bar = document.getElementById("activeBar");
+        const knob = document.getElementById("activeKnob");
+        const text = document.getElementById("activeText");
+        const setActiveVisual = (on) => {
+          if (!bar || !knob || !text) return;
+          bar.classList.toggle("bg-teal-500", on);
+          bar.classList.toggle("bg-gray-300", !on);
+          knob.classList.toggle("translate-x-5", on);
+          text.textContent = on ? "Active" : "Inactive";
+          text.classList.toggle("text-teal-700", on);
+          text.classList.toggle("text-gray-600", !on);
+        };
+        isActiveEl.addEventListener("change", (e) =>
+          setActiveVisual(e.target.checked)
+        );
+        setActiveVisual(false);
+
+        // --- Validation helpers ---
+        const $ = (id) => document.getElementById(id);
+        const showErr = (id, msg) => {
+          const el = $("err_" + id);
+          if (!el) return;
+          el.textContent = msg || "";
+          el.classList.toggle("hidden", !msg);
+        };
+        const clearErr = (id) => showErr(id, "");
+
+        const parseDMY = (s) => {
+          // expects dd-mm-yyyy
+          const m = (s || "").trim().match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+          if (!m) return null;
+          const d = new Date(+m[3], +m[2] - 1, +m[1]);
+          if (isNaN(d)) return null;
+          d.setHours(0, 0, 0, 0);
+          return d;
+        };
+
+        function validateField(id) {
+          const v = $(id)?.value?.trim() || "";
+          const type = $("type")?.value;
+
+          switch (id) {
+            case "code":
+              if (!v) return showErr("code", "Code is required.");
+              if (!/^[A-Za-z0-9_-]{3,40}$/.test(v))
+                return showErr("code", "3–40 chars, letters/numbers/_/- only.");
+              return clearErr("code");
+
+            case "type":
+              if (!v) return showErr("type", "Type is required.");
+              return clearErr("type");
+
+            case "value": {
+              if (!v) return showErr("value", "Value is required.");
+              const num = Number(v);
+              if (!Number.isFinite(num))
+                return showErr("value", "Enter a valid number.");
+              if (type === "percent") {
+                if (num <= 0 || num > 100)
+                  return showErr("value", "Percent must be 1–100.");
+              } else if (type === "amount") {
+                if (!Number.isInteger(num) || num <= 0)
+                  return showErr(
+                    "value",
+                    "Amount (minor) must be a positive integer."
+                  );
+              } else {
+                return showErr("value", "Select type first.");
+              }
+              return clearErr("value");
+            }
+
+            case "maxDiscountMinor": {
+              if (!v) return clearErr("maxDiscountMinor"); // optional
+              const num = Number(v);
+              if (!Number.isInteger(num) || num < 0)
+                return showErr("maxDiscountMinor", "Must be an integer ≥ 0.");
+              return clearErr("maxDiscountMinor");
+            }
+
+            case "regions": {
+              const selected = regionsSelect.getSelected() || [];
+              if (!selected.length)
+                return showErr("regions", "Pick at least one region.");
+              return clearErr("regions");
+            }
+
+            case "startsAt": {
+              if (!v) return showErr("startsAt", "Start date is required.");
+              const d = parseDMY(v);
+              if (!d)
+                return showErr("startsAt", "Invalid date. Use dd-mm-yyyy.");
+              return clearErr("startsAt");
+            }
+
+            case "endsAt": {
+              if (!v) return showErr("endsAt", "End date is required.");
+              const d = parseDMY(v);
+              if (!d) return showErr("endsAt", "Invalid date. Use dd-mm-yyyy.");
+              const s = parseDMY($("startsAt").value || "");
+              if (s && d < s)
+                return showErr(
+                  "endsAt",
+                  "End date must be on/after start date."
+                );
+              return clearErr("endsAt");
+            }
+
+            case "usageLimit": {
+              if (!v) return showErr("usageLimit", "Usage limit is required.");
+              const num = Number(v);
+              if (!Number.isInteger(num) || num < 1)
+                return showErr("usageLimit", "Must be an integer ≥ 1.");
+              return clearErr("usageLimit");
+            }
+
+            case "perUserLimit": {
+              if (!v)
+                return showErr("perUserLimit", "Per-user limit is required.");
+              const num = Number(v);
+              if (!Number.isInteger(num) || num < 1)
+                return showErr("perUserLimit", "Must be an integer ≥ 1.");
+              return clearErr("perUserLimit");
+            }
+
+            case "notes": {
+              if (v.length > 500)
+                return showErr("notes", "Max 500 characters.");
+              return clearErr("notes");
+            }
+          }
+        }
+
+        // Wire blur/change validations
+        [
+          "code",
+          "type",
+          "value",
+          "maxDiscountMinor",
+          "startsAt",
+          "endsAt",
+          "usageLimit",
+          "perUserLimit",
+          "notes",
+        ].forEach((id) => {
+          const el = $(id);
+          if (!el) return;
+          el.addEventListener("blur", () => validateField(id));
+          el.addEventListener("change", () => validateField(id));
+          el.addEventListener("input", () => {
+            if ($("err_" + id)?.textContent) validateField(id);
+          });
+        });
+        // regions (SlimSelect) change validation
+        document
+          .querySelector("#regions")
+          ?.addEventListener("change", () => validateField("regions"));
+
+        // Submit handler (we’ll wire API next step)
+        $("couponForm")?.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          // Validate all
+          const fields = [
+            "code",
+            "type",
+            "value",
+            "maxDiscountMinor",
+            "regions",
+            "startsAt",
+            "endsAt",
+            "usageLimit",
+            "perUserLimit",
+            "notes",
+          ];
+          fields.forEach(validateField);
+          // check any error shown
+          const hasError = fields.some(
+            (id) =>
+              !document
+                .getElementById("err_" + id)
+                ?.classList.contains("hidden")
+          );
+
+          if (hasError) {
+            // focus the first invalid
+            for (const id of fields) {
+              const errEl = $("err_" + id);
+              if (errEl && !errEl.classList.contains("hidden")) {
+                $(id)?.focus();
+                break;
+              }
+            }
+            return;
+          }
+
+          // Build payload
+          const type = $("type").value.trim();
+          const value = Number($("value").value);
+          const payload = {
+            code: $("code").value.trim(),
+            type,
+            value: type === "percent" ? value : undefined, // percent uses value
+            // for amount in minor units use value as amountMinor for API clarity later
+            amountMinor: type === "amount" ? value : undefined,
+            maxDiscountMinor: $("maxDiscountMinor").value
+              ? Number($("maxDiscountMinor").value)
+              : undefined,
+            regions: regionsSelect.getSelected() || [],
+            startsAt: (() => {
+              const d = parseDMY($("startsAt").value);
+              return d ? new Date(d.getTime()).toISOString() : null;
+            })(),
+            endsAt: (() => {
+              const d = parseDMY($("endsAt").value);
+              if (!d) return null;
+              d.setHours(23, 59, 59, 999);
+              return new Date(d.getTime()).toISOString();
+            })(),
+            usageLimit: Number($("usageLimit").value),
+            perUserLimit: Number($("perUserLimit").value),
+            isActive: $("isActive").checked,
+            notes: $("notes").value.trim(),
+          };
+
+          // Clean undefined keys
+          Object.keys(payload).forEach(
+            (k) => payload[k] === undefined && delete payload[k]
+          );
+
+          console.log("[coupon:new] payload", payload);
+          // Next step: POST to your frontend route (we’ll implement next)
+          // axios.post('/coupons/create', payload).then(...).catch(...);
+        });
+      });
+    </script>
+  </body>
+</html>

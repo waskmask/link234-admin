@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title }) %>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <%- include('partials/accHeader') %>
+
+    <main class="flex-1 mx-auto w-full max-w-[900px] pb-[80px] px-4 py-6">
+      <h1 class="text-xl font-semibold mb-4">Settings</h1>
+
+      <!-- Card -->
+      <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+        <h2 class="text-lg font-semibold mb-1">Change password</h2>
+        <p class="text-sm text-gray-600 mb-5">
+          Minimum 8 characters, must contain a letter, a number, and a symbol.
+        </p>
+
+        <!-- Alerts -->
+        <div
+          id="alertSuccess"
+          class="hidden mb-4 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 px-4 py-2 text-sm"
+        ></div>
+        <div
+          id="alertError"
+          class="hidden mb-4 rounded-lg border border-rose-200 bg-rose-50 text-rose-800 px-4 py-2 text-sm"
+        ></div>
+
+        <form id="pwdForm" class="space-y-4" novalidate>
+          <!-- Current password -->
+          <div>
+            <label
+              for="oldPassword"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Current password</label
+            >
+            <div class="relative">
+              <input
+                id="oldPassword"
+                name="oldPassword"
+                type="password"
+                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-10"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                data-toggle="oldPassword"
+                class="absolute inset-y-0 right-0 grid place-items-center w-10 text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <p
+              data-err="oldPassword"
+              class="hidden mt-1 text-sm text-rose-600"
+            ></p>
+          </div>
+
+          <!-- New password -->
+          <div>
+            <label
+              for="newPassword"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >New password</label
+            >
+            <div class="relative">
+              <input
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-10"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                data-toggle="newPassword"
+                class="absolute inset-y-0 right-0 grid place-items-center w-10 text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <p class="mt-1 text-xs text-gray-500">
+              Use at least 8 characters, including a letter, a number, and a
+              symbol.
+            </p>
+            <p
+              data-err="newPassword"
+              class="hidden mt-1 text-sm text-rose-600"
+            ></p>
+          </div>
+
+          <!-- Confirm password -->
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Confirm password</label
+            >
+            <div class="relative">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-10"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                data-toggle="confirmPassword"
+                class="absolute inset-y-0 right-0 grid place-items-center w-10 text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <p
+              data-err="confirmPassword"
+              class="hidden mt-1 text-sm text-rose-600"
+            ></p>
+          </div>
+
+          <div class="pt-2">
+            <button
+              id="submitBtn"
+              type="submit"
+              class="inline-flex items-center gap-2 rounded-lg bg-blue-600 text-white px-4 py-2.5 hover:bg-blue-700 disabled:opacity-60"
+            >
+              <svg
+                id="btnSpinner"
+                class="hidden h-4 w-4 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  class="opacity-20"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-80"
+                  d="M4 12a8 8 0 0 1 8-8"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/public/js/axios.min.js"></script>
+    <script>
+      (function () {
+        const $ = (s, r = document) => r.querySelector(s);
+        const show = (el) => el && el.classList.remove("hidden");
+        const hide = (el) => el && el.classList.add("hidden");
+        const setErr = (key, msg) => {
+          const el = document.querySelector('[data-err="' + key + '"]');
+          if (!el) return;
+          if (msg) {
+            el.textContent = msg;
+            show(el);
+          } else {
+            el.textContent = "";
+            hide(el);
+          }
+        };
+
+        const form = $("#pwdForm");
+        const oldPassword = $("#oldPassword");
+        const newPassword = $("#newPassword");
+        const confirmPassword = $("#confirmPassword");
+        const submitBtn = $("#submitBtn");
+        const spinner = $("#btnSpinner");
+        const alertSuccess = $("#alertSuccess");
+        const alertError = $("#alertError");
+
+        // Prevent spaces in password fields
+        for (const input of [oldPassword, newPassword, confirmPassword]) {
+          input.addEventListener("input", (e) => {
+            if (/\s/.test(e.target.value))
+              e.target.value = e.target.value.replace(/\s+/g, "");
+          });
+        }
+
+        // Show/hide toggles
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-toggle]");
+          if (!btn) return;
+          const id = btn.getAttribute("data-toggle");
+          const input = document.getElementById(id);
+          if (!input) return;
+          input.type = input.type === "password" ? "text" : "password";
+        });
+
+        // Strong password: letter + digit + symbol, min 8
+        const strongRx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+        function validateField(id) {
+          if (id === "oldPassword") {
+            if (!oldPassword.value.trim()) {
+              setErr("oldPassword", "Please enter your current password.");
+              return false;
+            }
+            setErr("oldPassword");
+            return true;
+          }
+          if (id === "newPassword") {
+            const v = newPassword.value;
+            if (!strongRx.test(v)) {
+              setErr(
+                "newPassword",
+                "Password must be 8+ chars and include a letter, a number & a symbol."
+              );
+              return false;
+            }
+            setErr("newPassword");
+            return true;
+          }
+          if (id === "confirmPassword") {
+            if (confirmPassword.value !== newPassword.value) {
+              setErr("confirmPassword", "Passwords do not match.");
+              return false;
+            }
+            setErr("confirmPassword");
+            return true;
+          }
+          return true;
+        }
+
+        // Blur validation
+        [oldPassword, newPassword, confirmPassword].forEach((i) => {
+          i.addEventListener("blur", () => validateField(i.id));
+        });
+
+        function validateAll() {
+          const a = validateField("oldPassword");
+          const b = validateField("newPassword");
+          const c = validateField("confirmPassword");
+          return a && b && c;
+        }
+
+        async function submit(e) {
+          e.preventDefault();
+          hide(alertSuccess);
+          hide(alertError);
+          if (!validateAll()) return;
+
+          submitBtn.disabled = true;
+          spinner.classList.remove("hidden");
+          try {
+            const payload = {
+              oldPassword: oldPassword.value,
+              newPassword: newPassword.value,
+            };
+            const { data } = await axios.post("/settings/password", payload, {
+              timeout: 15000,
+            });
+
+            alertSuccess.textContent = "Password updated successfully.";
+            show(alertSuccess);
+            hide(alertError);
+            form.reset();
+            oldPassword.focus();
+          } catch (err) {
+            const msg =
+              err?.response?.data?.message ||
+              err?.message ||
+              "Failed to change password";
+            alertError.textContent = msg;
+            show(alertError);
+            hide(alertSuccess);
+          } finally {
+            submitBtn.disabled = false;
+            spinner.classList.add("hidden");
+          }
+        }
+
+        form.addEventListener("submit", submit);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,360 @@
+<!-- views/admin-view.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title }) %>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <%- include('partials/accHeader') %>
+
+    <main class="flex-1 mx-auto w-full max-w-[1100px]  pb-[80px] px-4 py-6">
+      <h1 class="text-2xl font-semibold mb-5">Admin</h1>
+
+      <% if (error) { %>
+        <div class="mb-4 rounded-lg border border-rose-200 bg-rose-50 text-rose-800 px-4 py-3 text-sm"><%= error %></div>
+      <% } %>
+
+      <% const u = adminDetail || {}; %>
+      <% const me = admin || {}; %>
+      <% const canEdit = (me.role || '').toLowerCase() === 'superadmin' && String(me._id||me.id) !== String(u._id); %>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <!-- LEFT: Profile -->
+        <section class="rounded-xl  ">
+          <% if (!adminDetail) { %>
+            <div class="text-sm text-gray-600">No data.</div>
+          <% } else { %>
+        <!-- Admin profile card -->
+            <div class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+              <!-- Header -->
+              <div class="flex items-start gap-4">
+                <!-- Avatar (initials fallback) -->
+                <div class="grid place-items-center h-12 w-12 shrink-0 rounded-full border border-gray-200 bg-gradient-to-br from-gray-50 to-white text-gray-700 font-semibold">
+                  <%= (u.name || '—').split(' ').map(s => s[0]).join('').slice(0,2).toUpperCase() %>
+                </div>
+            
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h2 class="text-xl font-semibold text-gray-900 truncate"><%= u.name || '—' %></h2>
+                    <% const r=(u.role||'').toLowerCase(); %>
+                    <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full border
+                      <%= r==='superadmin' ? 'bg-purple-100 text-purple-800 border-purple-200'
+                          : r==='admin' ? 'bg-blue-100 text-blue-800 border-blue-200'
+                          : r==='moderator' ? 'bg-amber-100 text-amber-800 border-amber-200'
+                          : r==='sales' ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                          : 'bg-gray-100 text-gray-800 border-gray-200' %>">
+                      <!-- role dot -->
+                      <span class="h-1.5 w-1.5 rounded-full
+                        <%= r==='superadmin' ? 'bg-purple-500'
+                            : r==='admin' ? 'bg-blue-500'
+                            : r==='moderator' ? 'bg-amber-500'
+                            : r==='sales' ? 'bg-emerald-500'
+                            : 'bg-gray-400' %>"></span>
+                      <%= r ? r.charAt(0).toUpperCase()+r.slice(1) : '—' %>
+                    </span>
+                
+                    <!-- Status chip -->
+                    <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full border
+                      <%= u.isActive ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                                     : 'bg-rose-100 text-rose-800 border-rose-200' %>">
+                      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <% if (u.isActive) { %>
+                          <path d="M20 6L9 17l-5-5"></path>
+                        <% } else { %>
+                          <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
+                        <% } %>
+                      </svg>
+                      <%= u.isActive ? 'Active' : 'Inactive' %>
+                    </span>
+                  </div>
+              
+                  <!-- Email row w/ copy -->
+                  <div class="mt-1 flex items-center gap-2 text-sm text-gray-700">
+                    <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/>
+                    </svg>
+                    <span class="truncate"><%= u.email || '—' %></span>
+                    <% if (u.email) { %>
+                      <button
+                        type="button"
+                        class="ml-1 inline-flex items-center gap-1 rounded-md border border-gray-200 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-50"
+                        onclick="navigator.clipboard?.writeText('<%= u.email %>')">
+                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                        Copy
+                      </button>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+          
+              <!-- Meta grid -->
+              <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div class="flex items-start gap-2">
+                  <svg class="h-4 w-4 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                  </svg>
+                  <div>
+                    <div class="text-gray-500">Role</div>
+                    <div class="font-medium"><%= r ? r.charAt(0).toUpperCase()+r.slice(1) : '—' %></div>
+                  </div>
+                </div>
+            
+                <div class="flex items-start gap-2">
+                  <svg class="h-4 w-4 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"/>
+                  </svg>
+                  <div>
+                    <div class="text-gray-500">Created</div>
+                    <div class="font-medium">
+                      <%= u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '—' %>
+                      <span class="text-xs text-gray-500 ml-1">
+                        <%= u.createdAt ? new Date(u.createdAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}) : '' %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="flex items-start gap-2">
+                  <svg class="h-4 w-4 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3h18v4H3zM3 7v14h18V7"/><path d="M7 11h10M7 15h6"/>
+                  </svg>
+                  <div>
+                    <div class="text-gray-500">Updated</div>
+                    <div class="font-medium">
+                      <%= u.updatedAt ? new Date(u.updatedAt).toLocaleDateString() : '—' %>
+                      <span class="text-xs text-gray-500 ml-1">
+                        <%= u.updatedAt ? new Date(u.updatedAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}) : '' %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="flex items-start gap-2">
+                  <svg class="h-4 w-4 mt-0.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-3-3.87M4 21v-2a4 4 0 0 1 3-3.87"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <div>
+                    <div class="text-gray-500">Last login</div>
+                    <div class="font-medium">
+                      <%= u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString() : '—' %>
+                      <span class="text-xs text-gray-500 ml-1">
+                        <%= u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"}) : '' %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <% } %>
+        </section>
+
+        <!-- RIGHT: Actions -->
+        <section class="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+          <h2 class="font-semibold mb-4">Actions</h2>
+
+          <!-- Status toggle -->
+          <div class="mb-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-medium">Account Status</div>
+                <div class="text-xs text-gray-500">
+                  <%= canEdit ? 'Toggle active/inactive' : (String(me._id||me.id)===String(u._id) ? 'You cannot change your own status.' : 'Only superadmin can change status.') %>
+                </div>
+              </div>
+              <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                <input id="statusToggle" type="checkbox" class="sr-only"
+                       <%= u.isActive ? 'checked' : '' %> <%= canEdit ? '' : 'disabled' %> />
+                <span id="toggleBar" class="relative inline-block w-11 h-6 rounded-full transition <%= u.isActive ? 'bg-teal-500' : 'bg-gray-300' %>">
+                  <span id="toggleKnob" class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition <%= u.isActive ? 'translate-x-5' : '' %>"></span>
+                </span>
+                <span id="toggleText" class="text-sm <%= u.isActive ? 'text-teal-700' : 'text-gray-600' %>">
+                  <%= u.isActive ? 'Active' : 'Inactive' %>
+                </span>
+              </label>
+            </div>
+            <p id="statusMsg" class="mt-2 hidden text-sm"></p>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Change password -->
+          <div>
+            <h3 class="font-medium mb-2">Change Password</h3>
+            <p class="text-xs text-gray-500 mb-3">
+              Minimum 8 characters, must contain a number and a symbol.
+            </p>
+
+            <form id="pwdForm" class="space-y-3">
+              <div>
+                <label class="block text-sm text-gray-700 mb-1">New password</label>
+                <div class="relative">
+                  <input id="newPwd" type="password"
+                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                         placeholder="••••••••" autocomplete="new-password" <%= canEdit ? '' : 'disabled' %> />
+                  <button id="pwdToggle" type="button"
+                          class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                    👁
+                  </button>
+                </div>
+                <p id="newPwdErr" class="mt-1 text-xs text-rose-600 hidden"></p>
+              </div>
+
+              <div>
+                <label class="block text-sm text-gray-700 mb-1">Confirm password</label>
+                <input id="confirmPwd" type="password"
+                       class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                       placeholder="••••••••" autocomplete="new-password" <%= canEdit ? '' : 'disabled' %> />
+                <p id="confirmPwdErr" class="mt-1 text-xs text-rose-600 hidden"></p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button id="pwdSubmit" type="submit"
+                        class="inline-flex items-center gap-2 rounded-lg bg-gray-900 text-white px-4 py-2 hover:bg-black disabled:opacity-50"
+                        <%= canEdit ? '' : 'disabled' %>>
+                  <span>Update Password</span>
+                  <svg id="pwdSpinner" class="hidden animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                </button>
+                <div id="pwdMsg" class="text-sm"></div>
+              </div>
+            </form>
+
+            <% if (!canEdit) { %>
+              <p class="mt-2 text-xs text-gray-600">
+                <%= String(me._id||me.id)===String(u._id)
+                    ? 'You cannot change your own password here. Use your profile → Change Password.'
+                    : 'Only superadmin can change other admins’ passwords.' %>
+              </p>
+            <% } %>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/public/js/axios.min.js"></script>
+    
+    <script>
+      (function () { 
+        const viewId = "<%= viewId %>";
+         window.canEdit = JSON.parse(
+        decodeURIComponent(
+          "<%- encodeURIComponent(JSON.stringify(canEdit || [])) %>"
+          )
+        );
+       
+        const $ = (s, r=document) => r.querySelector(s);
+        const show = (el)=>el&&el.classList.remove("hidden");
+        const hide = (el)=>el&&el.classList.add("hidden");
+        const setText = (el, t, tone="") => {
+          if (!el) return;
+          el.textContent = t || "";
+          el.className = "mt-2 text-sm " + (tone || "");
+          if (t) show(el); else hide(el);
+        };
+
+        // Toggle UI parts
+        const statusToggle = $("#statusToggle");
+        const toggleBar = $("#toggleBar");
+        const toggleKnob = $("#toggleKnob");
+        const toggleText = $("#toggleText");
+        const statusMsg = $("#statusMsg");
+
+        function paintToggle(on) {
+          toggleBar.classList.toggle("bg-teal-500", on);
+          toggleBar.classList.toggle("bg-gray-300", !on);
+          toggleKnob.classList.toggle("translate-x-5", on);
+          toggleText.textContent = on ? "Active" : "Inactive";
+          toggleText.classList.toggle("text-teal-700", on);
+          toggleText.classList.toggle("text-gray-600", !on);
+        }
+
+        if (statusToggle) {
+          statusToggle.addEventListener("change", async (e) => {
+            if (!canEdit) return;
+            const on = e.target.checked;
+            paintToggle(on);
+            setText(statusMsg, "", "");
+
+            try {
+              await axios.post(`/admin/${viewId}/status`, { isActive: on });
+              setText(statusMsg, "Status updated.", "text-emerald-700");
+            } catch (err) {
+              // revert
+              statusToggle.checked = !on;
+              paintToggle(!on);
+              setText(statusMsg, err?.response?.data?.message || "Failed to update status.", "text-rose-700");
+            }
+          });
+        }
+
+        // Password form
+        const newPwd = $("#newPwd");
+        const confirmPwd = $("#confirmPwd");
+        const newPwdErr = $("#newPwdErr");
+        const confirmPwdErr = $("#confirmPwdErr");
+        const pwdForm = $("#pwdForm");
+        const pwdSubmit = $("#pwdSubmit");
+        const pwdSpinner = $("#pwdSpinner");
+        const pwdMsg = $("#pwdMsg");
+        const pwdToggle = $("#pwdToggle");
+
+        function validatePwd() {
+          hide(newPwdErr); hide(confirmPwdErr);
+          if (!newPwd || !confirmPwd) return false;
+          newPwd.value = newPwd.value.replace(/\s+/g, "");
+          confirmPwd.value = confirmPwd.value.replace(/\s+/g, "");
+
+          let ok = true;
+         const strong = new RegExp('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$');
+          if (!strong.test(newPwd.value)) {
+            newPwdErr.textContent = "Password must be 8+ chars and include a number & symbol.";
+            show(newPwdErr); ok = false;
+          }
+          if (newPwd.value !== confirmPwd.value) {
+            confirmPwdErr.textContent = "Passwords do not match.";
+            show(confirmPwdErr); ok = false;
+          }
+          return ok;
+        }
+
+        if (pwdToggle) {
+          pwdToggle.addEventListener("click", () => {
+            if (!newPwd || !confirmPwd) return;
+            const type = newPwd.type === "password" ? "text" : "password";
+            newPwd.type = type;
+            confirmPwd.type = type;
+          });
+        }
+
+        if (pwdForm) {
+          pwdForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            setText(pwdMsg, "", "");
+            if (!canEdit) return;
+            if (!validatePwd()) return;
+
+            pwdSubmit.disabled = true;
+            pwdSpinner.classList.remove("hidden");
+            try {
+              await axios.post(`/admin/${viewId}/password`, { newPassword: newPwd.value });
+              setText(pwdMsg, "Password updated successfully.", "text-emerald-700");
+              pwdForm.reset();
+            } catch (err) {
+              setText(pwdMsg, err?.response?.data?.message || "Password update failed.", "text-rose-700");
+            } finally {
+              pwdSubmit.disabled = false;
+              pwdSpinner.classList.add("hidden");
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

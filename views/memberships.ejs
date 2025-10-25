@@ -1,0 +1,84 @@
+<!-- views/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title: 'Memberships · Link234' }) %>
+    <link rel="stylesheet" href="/vendor/gridjs/theme/mermaid.min.css" />
+    <link rel="stylesheet" href="/public/js/datedropper.min.css" />
+    <script src="/public/js/datedropper-javascript.js"></script>
+    <style>
+      .dd__calendar .dd__body .dd__item.dd-selected:before,
+      .dd__primaryButton:not([disabled]),
+      .dd__block[data-key="m"] {
+        background: #155dfc !important;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <%- include('partials/accHeader') %>
+
+    <main class="mx-auto w-full max-w-[1500px] pb-[80px] px-4 py-6">
+      <% if (typeof error !== 'undefined') { %>
+      <div
+        class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700"
+      >
+        <%= error %>
+      </div>
+      <% } %>
+
+      <!-- Toolbar (will be moved next to Grid.js search after render) -->
+
+      <div id="gridToolbar" class="flex flex-wrap items-center gap-2 mb-2">
+        <h4 class="text-xl font-bold dark:text-white">Membership purchases</h4>
+        <div class="ml-auto flex items-center gap-2">
+          <a
+            href="/membership-plans"
+            class="px-3 py-2 rounded-lg border bg-blue-600 text-white hover:bg-blue-500"
+          >
+            Memberships List
+          </a>
+        </div>
+      </div>
+
+      <div id="grid"></div>
+    </main>
+
+    <script>
+      window.PURCHASES = JSON.parse(
+        decodeURIComponent(
+          "<%- encodeURIComponent(JSON.stringify(items || [])) %>"
+        )
+      );
+    </script>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/public/js/app.js"></script>
+    <script src="/vendor/gridjs/gridjs.umd.js"></script>
+    <script src="/public/js/memberships.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        new dateDropper({
+          selector: "#outward-date",
+          lang: "en",
+          format: "dd-mm-yyyy",
+          maxDate: new Date(),
+          overlay: false,
+          autofill: true,
+        });
+        new dateDropper({
+          selector: "#return-date",
+          lang: "en",
+          format: "dd-mm-yyyy",
+          maxDate: new Date(),
+          overlay: false,
+          autofill: true,
+        });
+      });
+    </script>
+  </body>
+</html>

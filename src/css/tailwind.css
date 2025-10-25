@@ -1,0 +1,81 @@
+@import "tailwindcss";
+/* Tell Tailwind to scan Preline's JS for classes */
+@source "./node_modules/preline/dist/*.js";
+
+/* Preline variants (required for component states) */
+@import "preline/variants.css";
+/* Plugins (v4 style) */
+@plugin "@tailwindcss/forms";
+
+/* Define tokens -> auto-creates utilities like font-heading, bg-g1-red, etc. */
+@theme {
+  --font-sans: Inter, system-ui, Segoe UI, Roboto, sans-serif;
+  --font-heading: Outfit, Inter, sans-serif;
+
+  --color-g1-red: #ff3b30;
+  --color-g1-ink: #111111;
+  --color-g1-slate: #6b7280;
+}
+
+/* Adds pointer cursor to buttons */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* Defaults hover styles on all devices */
+@custom-variant hover (&:hover);
+
+/* optional helpers */
+.heading {
+  @apply font-heading tracking-tight;
+}
+
+.btn-g1,
+.btn-g1-outline {
+  min-height: 40.33px !important; /* exact spec */
+  white-space: nowrap; /* avoid wrapping */
+}
+
+/* Tailwind utility bundles */
+.btn-g1 {
+  @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden;
+}
+
+.btn-g1-outline {
+  @apply inline-flex items-center gap-x-2 px-4 py-3 text-sm font-medium rounded-lg border border-gray-200 text-gray-500 hover:border-blue-600 hover:text-blue-600 focus:outline-hidden focus:border-blue-600 focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-blue-500 dark:hover:border-blue-600 dark:focus:text-blue-500 dark:focus:border-blue-600;
+}
+
+.ss-main {
+  padding: 0.6565rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5dc;
+  color: #101828;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.ss-content {
+  box-shadow: 0px 16px 18px #b9b9b9;
+}
+.ss-content .ss-list {
+  border: none;
+}
+.ss-content .ss-list .ss-option {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+.ss-content .ss-list .ss-option.ss-highlighted,
+.ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected {
+  background-color: #155dfc;
+}
+.ss-content .ss-list .ss-option:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.ss-main:focus,
+.ss-content .ss-search input:focus {
+  outline: none;
+  box-shadow: none;
+}

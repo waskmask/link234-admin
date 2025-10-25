@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title: 'Reset password · G1QR' }) %>
+  </head>
+  <body class="min-h-dvh bg-gray-50 text-gray-900">
+    <main class="min-h-dvh flex items-center justify-center px-4">
+      <div class="w-full max-w-[400px]">
+        <!-- Logo + slogan -->
+        <div class="text-center mb-6">
+          <img src="/images/logo.svg" alt="G1QR" class="mx-auto h-9" />
+          <p class="mt-2 text-sm text-gray-600">Coz Every Second Matters.</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div class="p-5 sm:p-7">
+            <div class="text-center">
+              <h1 class="block text-2xl font-bold">Reset password</h1>
+              <p class="mt-2 text-sm text-gray-600">
+                Enter a new password for your account. Use at least 8
+                characters, including a number or symbol.
+              </p>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+            <div
+              class="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+            >
+              <%= error %>
+            </div>
+            <% } %>
+
+            <form id="resetForm" action="/reset" method="post" class="mt-6">
+              <!-- token comes from query string in GET /reset -->
+              <input type="hidden" name="token" value="<%= token || '' %>" />
+
+              <div class="grid gap-y-4">
+                <!-- New password -->
+                <div>
+                  <label for="password" class="block text-sm mb-2"
+                    >New password</label
+                  >
+                  <div class="relative">
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      minlength="8"
+                      autocomplete="new-password"
+                      class="py-3 px-4 pr-10 block w-full border border-gray-300 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500"
+                      required
+                    />
+                    <!-- show/hide (auto-hide after 2s; uses your existing JS) -->
+                    <button
+                      type="button"
+                      class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600"
+                      aria-controls="password"
+                      data-toggle-password
+                      data-timeout="2000"
+                      aria-label="Show password"
+                    >
+                      <svg
+                        class="eye-on size-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M10 4.5c-4.167 0-7.5 3.333-8.75 5.5 1.25 2.167 4.583 5.5 8.75 5.5s7.5-3.333 8.75-5.5C17.5 7.833 14.167 4.5 10 4.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"
+                        />
+                      </svg>
+                      <svg
+                        class="eye-off size-5 hidden"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M3.28 2.22 2.22 3.28l2.01 2.01C2.9 7 1.7 8.6 1.25 10c1.25 2.167 4.583 5.5 8.75 5.5 1.67 0 3.21-.43 4.56-1.18l2.19 2.18 1.06-1.06L3.28 2.22ZM10 6.5c.37 0 .73.07 1.06.2l-1.36 1.36A1.5 1.5 0 0 0 8.5 9.5c0 .37.13.71.34.98l-1.1 1.1A3.5 3.5 0 0 1 10 6.5Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Confirm password -->
+                <div>
+                  <label for="confirm" class="block text-sm mb-2"
+                    >Confirm new password</label
+                  >
+                  <div class="relative">
+                    <input
+                      type="password"
+                      id="confirm"
+                      name="confirm"
+                      minlength="8"
+                      autocomplete="new-password"
+                      class="py-3 px-4 pr-10 block w-full border border-gray-300 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-600"
+                      aria-controls="confirm"
+                      data-toggle-password
+                      data-timeout="2000"
+                      aria-label="Show password"
+                    >
+                      <svg
+                        class="eye-on size-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M10 4.5c-4.167 0-7.5 3.333-8.75 5.5 1.25 2.167 4.583 5.5 8.75 5.5s7.5-3.333 8.75-5.5C17.5 7.833 14.167 4.5 10 4.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"
+                        />
+                      </svg>
+                      <svg
+                        class="eye-off size-5 hidden"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M3.28 2.22 2.22 3.28l2.01 2.01C2.9 7 1.7 8.6 1.25 10c1.25 2.167 4.583 5.5 8.75 5.5 1.67 0 3.21-.43 4.56-1.18l2.19 2.18 1.06-1.06L3.28 2.22ZM10 6.5c.37 0 .73.07 1.06.2l-1.36 1.36A1.5 1.5 0 0 0 8.5 9.5c0 .37.13.71.34.98l-1.1 1.1A3.5 3.5 0 0 1 10 6.5Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <p id="matchHelp" class="mt-2 hidden text-sm text-red-600">
+                    Passwords don’t match.
+                  </p>
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  Save new password
+                </button>
+
+                <p class="text-sm text-gray-600 text-center">
+                  Back to
+                  <a
+                    href="/login"
+                    class="text-blue-600 hover:underline font-medium"
+                    >sign in</a
+                  >
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <!-- Optional client-side check -->
+    <script>
+      document
+        .getElementById("resetForm")
+        ?.addEventListener("submit", function (e) {
+          const p1 = document.getElementById("password");
+          const p2 = document.getElementById("confirm");
+          const help = document.getElementById("matchHelp");
+          const ok = p1.value.length >= 8 && p1.value === p2.value;
+          if (!ok) {
+            e.preventDefault();
+            help.classList.remove("hidden");
+            p2.focus();
+          }
+        });
+    </script>
+  </body>
+</html>

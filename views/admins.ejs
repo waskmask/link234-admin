@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title }) %>
+    <link rel="stylesheet" href="/vendor/gridjs/theme/mermaid.min.css" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <%- include('partials/accHeader') %>
+
+    <main class="flex-1 mx-auto w-full max-w-[1400px] pb-[80px] px-4 py-6">
+      <div class="flex items-center mb-5">
+        <h1 class="text-2xl font-semibold">All Admin Users</h1>
+      </div>
+
+      <!-- Grid toolbar (optional filters) -->
+      <div id="gridToolbar" class="flex items-center gap-2 mb-3">
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search name or email..."
+          class="w-full sm:w-80 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+        />
+        <select
+          id="roleFilter"
+          class="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+        >
+          <option value="">All roles</option>
+          <option value="superadmin">Super Admin</option>
+          <option value="admin">Admin</option>
+          <option value="moderator">Moderator</option>
+          <option value="sales">Sales</option>
+        </select>
+        <select
+          id="statusFilter"
+          class="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+        >
+          <option value="">Any status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button
+          id="applyFilters"
+          class="rounded-lg bg-gray-800 text-white px-3 py-2 text-sm hover:bg-gray-900"
+        >
+          Apply
+        </button>
+      </div>
+
+      <!-- Grid container -->
+      <div id="grid"></div>
+    </main>
+
+    <%- include('partials/footer') %>
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/vendor/gridjs/gridjs.umd.js"></script>
+    <script src="/public/js/admins-list.js"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title><%= title || "G1QR" %></title>
+<link
+  rel="shortcut icon"
+  href="/images/favicon.png"
+  type="image/png"
+  sizes="any"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;700&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="/public/css/app.css" />
+
+<!-- 1) deps -->
+<script defer src="/vendor/lodash/lodash.min.js"></script>
+
+<!-- 3) Preline core -->
+<script defer src="/vendor/preline/preline.js"></script>
+
+<!-- 4) init AFTER Preline is present -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    window.HSStaticMethods?.autoInit?.();
+  });
+</script>
+
+<!-- your app -->
+<script defer src="/public/js/app.js"></script>

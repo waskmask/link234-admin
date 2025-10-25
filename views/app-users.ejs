@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head', { title }) %>
+    <link rel="stylesheet" href="/vendor/gridjs/theme/mermaid.min.css" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <%- include('partials/accHeader') %>
+
+    <main class="mx-auto w-full max-w-[1400px] pb-[80px] px-4 py-6">
+      <div class="flex items-center gap-3 mb-5">
+        <h1 class="text-2xl font-semibold">App Users</h1>
+      </div>
+
+      <div id="grid"></div>
+    </main>
+
+    <!-- Toasts -->
+    <div id="toastRoot" class="fixed top-4 right-4 space-y-3 z-[200]"></div>
+
+    <%- include('partials/footer') %>
+    <script src="/public/js/axios.min.js"></script>
+    <script src="/vendor/gridjs/gridjs.umd.js"></script>
+    <script>
+      // expose route for the client
+      window.APP_USERS_DATA_URL = "/users/data";
+      window.DEFAULT_AVATAR_URL = "/public/images/avatar-placeholder.png"; // adjust if different
+    </script>
+    <script src="/public/js/app-users.js"></script>
+  </body>
+</html>

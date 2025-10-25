@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head', { title: (typeof title !== 'undefined' ?
+    title : 'Page not found · G1QR') }) %>
+  </head>
+  <body class="min-h-dvh bg-gray-50 text-gray-900">
+    <main class="min-h-dvh flex items-center justify-center px-4">
+      <div class="w-full max-w-[400px]">
+        <!-- Logo + slogan -->
+        <div class="text-center mb-6">
+          <img src="/images/logo.svg" alt="G1QR" class="mx-auto h-9" />
+          <p class="mt-2 text-sm text-gray-600">Coz Every Second Matters.</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div class="p-6 text-center">
+            <div
+              class="mx-auto mb-3 size-12 rounded-full bg-blue-100 flex items-center justify-center"
+            >
+              <!-- 404 icon -->
+              <svg
+                class="size-6 text-blue-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm-1-5.5a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm1-7a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z"
+                />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold">Page not found</h1>
+            <p class="mt-2 text-sm text-gray-600">
+              The page you’re looking for doesn’t exist or has been moved.
+            </p>
+
+            <div class="mt-6 grid gap-2">
+              <a
+                href="/"
+                class="inline-flex w-full justify-center rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Go to home
+              </a>
+              <a
+                href="javascript:history.back()"
+                class="inline-flex w-full justify-center rounded-lg border px-4 py-3 text-sm font-medium hover:bg-gray-50"
+              >
+                Go back
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </body>
+</html>

@@ -1,0 +1,178 @@
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="mx-auto w-full max-w-[1500px] px-4">
+    <div class="h-16 flex items-center justify-between gap-4">
+      <!-- Left: Logo -->
+      <a href="/dashboard" class="shrink-0 inline-flex items-center gap-2">
+        <img src="/public/images/l234-logo.svg" alt="Link234" class="h-8" />
+      </a>
+
+      <!-- Middle: desktop nav -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a
+          href="/dashboard"
+          class="<%= path === 'dashboard' ? 'text-blue-600 font-bold pointer-events-none':'' %> text-sm hover:text-blue-600"
+        >
+          Dashboard
+        </a>
+        <a
+          href="/app-users"
+          class="<%= path === 'app-users' ? 'text-blue-600 font-bold pointer-events-none':'' %> text-sm hover:text-blue-600"
+          >Users</a
+        >
+        <a
+          href="/memberships"
+          class="<%= path === 'memberships' ? 'text-blue-600 font-bold pointer-events-none':'' %> text-sm hover:text-blue-600"
+          >Memberships</a
+        >
+        <a
+          href="/coupons"
+          class="<%= path === 'coupons' ? 'text-blue-600 font-bold pointer-events-none':'' %> text-sm hover:text-blue-600"
+          >Coupons</a
+        >
+        <a
+          href="/submissions"
+          class="<%= path === 'contacts' ? 'text-blue-600 font-bold pointer-events-none':'' %> text-sm hover:text-blue-600"
+          >Contacts</a
+        >
+      </nav>
+
+      <!-- Mobile burger (md:hidden) -->
+      <button
+        type="button"
+        class="md:hidden p-2 hover:bg-gray-100 rounded-lg"
+        data-hs-overlay="#mobileNav"
+        aria-label="Open menu"
+      >
+        <!-- burger icon -->
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M4 7h16M4 12h16M4 17h16"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+
+      <!-- Right: User dropdown -->
+      <div class="hs-dropdown relative inline-flex">
+        <button
+          type="button"
+          class="hs-dropdown-toggle inline-flex items-center gap-3 rounded-lg px-3 py-2 pr-0"
+          id="userMenuBtn"
+          aria-expanded="false"
+          data-hs-dropdown="#userMenu"
+        >
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gray-200"
+          >
+            <!-- simple user icon -->
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+        </button>
+
+        <!-- Dropdown -->
+        <div
+          class="userMenu hs-dropdown-menu mt-2 hidden min-w-48 rounded-lg bg-white p-2 shadow-md"
+          aria-labelledby="userMenuBtn"
+        >
+          <div class="px-3 py-2">
+            <p class="text-sm font-medium">
+              <%= (admin?.name || 'Admin User') %>
+            </p>
+            <p class="text-xs text-gray-500"><%= (admin?.role || '') %></p>
+          </div>
+          <div class="my-2 h-px bg-gray-200"></div>
+          <a
+            href="/settings"
+            class="block rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+            >Settings</a
+          >
+          <a
+            href="/admins"
+            class="block rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+            >Admin users</a
+          >
+          <button
+            onclick="logout()"
+            id="logoutBtn"
+            class="w-full text-left rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Drawer -->
+<div
+  id="mobileNav"
+  class="hs-overlay hidden fixed inset-0 z-[60]"
+  tabindex="-1"
+>
+  <!-- overlay (click to close) -->
+  <div
+    class="hs-overlay-backdrop absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 hs-overlay-open:opacity-100"
+    data-hs-overlay="#mobileNav"
+  ></div>
+
+  <!-- panel -->
+  <div
+    class="relative h-full w-72 max-w-[85%] bg-white shadow-xl transform -translate-x-full transition-transform duration-300 hs-overlay-open:translate-x-0"
+  >
+    <div class="flex items-center justify-between px-4 h-16 border-b">
+      <img src="/public/images/l234-logo.svg" class="h-6" alt="Link234" />
+      <button
+        class="p-2 rounded-lg hover:bg-gray-100"
+        data-hs-overlay="#mobileNav"
+        aria-label="Close"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M6 6l12 12M18 6l-12 12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="px-4 py-4 flex flex-col gap-2">
+      <a
+        href="/dashboard"
+        class="<%= path === 'dashboard' ? 'text-blue-600 font-bold pointer-events-none':'' %> px-3 py-2 rounded-md hover:bg-gray-100"
+        >Dashboard</a
+      >
+      <a href="/users" class="px-3 py-2 rounded-md hover:bg-gray-100">Users</a>
+      <a
+        href="/memberships"
+        class="<%= path === 'memberships' ? 'text-blue-600 font-bold pointer-events-none':'' %> px-3 py-2 rounded-md hover:bg-gray-100"
+        >Memberships</a
+      >
+      <a
+        href="/contacts"
+        class="<%= path === 'contacts' ? 'text-blue-600 font-bold pointer-events-none':'' %> px-3 py-2 rounded-md hover:bg-gray-100"
+        >Contacts</a
+      >
+      <div class="mt-4 border-t pt-4">
+        <div class="text-xs text-gray-500 mb-2">Signed in as</div>
+        <div class="text-sm font-medium"><%= admin?.name || 'Admin' %></div>
+        <div class="text-xs text-gray-500"><%= admin?.role || 'admin' %></div>
+      </div>
+      <button
+        onclick="logout()"
+        id="logoutBtn"
+        class="mt-4 w-full text-left px-3 py-2 rounded-md hover:bg-gray-100"
+      >
+        Logout
+      </button>
+    </nav>
+  </div>
+</div>
