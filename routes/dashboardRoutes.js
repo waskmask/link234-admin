@@ -11,25 +11,25 @@ const {
 // Dashboard
 router.get("/dashboard", async (req, res) => {
   try {
-    const common = {
-      headers: {
-        Origin: req.headers.origin || "",
-        Cookie: req.headers.cookie || "",
-      },
-      withCredentials: true,
-      timeout: 15000,
-    };
+    // const common = {
+    //   headers: {
+    //     Origin: req.headers.origin || "",
+    //     Cookie: req.headers.cookie || "",
+    //   },
+    //   withCredentials: true,
+    //   timeout: 15000,
+    // };
 
-    const { data } = await axios.get(
-      `${process.env.API_URL}/api/admin/dashboard`,
-      common
-    );
+    // const { data } = await axios.get(
+    //   `${process.env.API_URL}/api/admin/dashboard`,
+    //   common
+    // );
 
     return res.render("dashboard", {
       title: "Dashboard",
       admin: req.admin,
       path: "dashboard",
-      dashboard: data, // ⬅️ pass payload to EJS
+      dashboard: [], // ⬅️ pass payload to EJS
     });
   } catch (error) {
     console.error("Dashboard proxy error:", {
