@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (res?.data?.success) {
         // success → cookie set by api.link234.com (HttpOnly; Secure; SameSite=None)
-        // location.href = "/dashboard";
+        location.href = "/dashboard";
         return;
       }
 
