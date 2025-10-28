@@ -9,7 +9,7 @@ const {
 } = require("../middlewares/auth");
 
 // Dashboard
-router.get("/dashboard", isLoggedIn, async (req, res) => {
+router.get("/dashboard", async (req, res) => {
   try {
     const common = {
       headers: {
